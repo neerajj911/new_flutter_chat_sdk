@@ -11,17 +11,11 @@ buildscript {
     }
 }
 
-def flutterModuleRepo = rootProject.hasProperty('FLUTTER_MODULE_REPO')
-        ? rootProject.property('FLUTTER_MODULE_REPO') : null
-
 allprojects {
     repositories {
         google()
         mavenCentral()
         maven { url "https://storage.googleapis.com/download.flutter.io" }
-        if (flutterModuleRepo != null) {
-            maven { url flutterModuleRepo }
-        }
     }
 }
 

@@ -55,9 +55,19 @@ jobs:
       - name: Build and publish SDK to local Maven repo
         working-directory: native-android-sdk
         run: |
+          # Create Gradle init script to inject Flutter module's local maven repo
           FLUTTER_REPO="file://${{ github.workspace }}/flutter_chat_module/build/host/outputs/repo"
-          gradle :sdk:publish \
-            -PFLUTTER_MODULE_REPO="$FLUTTER_REPO" \
+          cat > /tmp/flutter-repo.init.gradle << EOF
+          allprojects {
+              repositories {
+                  maven {
+                      url "${FLUTTER_REPO}"
+                  }
+              }
+          }
+          EOF
+          cat /tmp/flutter-repo.init.gradle
+          gradle --init-script /tmp/flutter-repo.init.gradle :sdk:publish \
             -PMAVEN_REPO_URL="file://$PWD/build/maven-repo" \
             -PSDK_VERSION=${{ env.VERSION }}
 
