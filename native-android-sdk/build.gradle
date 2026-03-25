@@ -16,6 +16,10 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://storage.googleapis.com/download.flutter.io" }
+        // Flutter module AAR repo (built by 'flutter build aar', path passed via -P in CI)
+        if (rootProject.hasProperty('FLUTTER_MODULE_REPO')) {
+            maven { url rootProject.property('FLUTTER_MODULE_REPO') }
+        }
     }
 }
 

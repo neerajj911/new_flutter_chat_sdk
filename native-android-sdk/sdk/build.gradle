@@ -31,8 +31,8 @@ android {
 }
 
 dependencies {
-    // Flutter AAR (built in CI and copied to libs/)
-    implementation(name: 'flutter_release-1', ext: 'aar')
+    // Flutter module AAR (resolved from its local maven repo built by 'flutter build aar')
+    releaseImplementation 'com.flutterchat.module:flutter_release:+'
 
     // Flutter engine transitive dependencies
     releaseImplementation 'io.flutter:flutter_embedding_release:1.0.0-+'
@@ -42,12 +42,6 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-}
-
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
 }
 
 def mavenRepoUrl = project.hasProperty('MAVEN_REPO_URL')
