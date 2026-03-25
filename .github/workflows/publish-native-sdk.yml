@@ -42,10 +42,16 @@ jobs:
         run: |
           flutter build aar --no-profile --no-debug --build-number 1
 
-      - name: Inspect Flutter AAR output
+      - name: Copy Flutter AAR to SDK libs
         run: |
+          mkdir -p native-android-sdk/sdk/libs
           echo "=== Flutter AAR repo contents ==="
-          find flutter_chat_module/build/host/outputs/repo -type f | head -50
+          find flutter_chat_module/build/host/outputs/repo -name '*.aar' -type f
+          # Find and copy the release AAR
+          AAR_FILE=$(find flutter_chat_module/build/host/outputs/repo -name 'flutter_release-*.aar' -type f | head -1)
+          echo "Found AAR: $AAR_FILE"
+          cp "$AAR_FILE" native-android-sdk/sdk/libs/flutter_release.aar
+          ls -la native-android-sdk/sdk/libs/
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -55,19 +61,7 @@ jobs:
       - name: Build and publish SDK to local Maven repo
         working-directory: native-android-sdk
         run: |
-          # Create Gradle init script to inject Flutter module's local maven repo
-          FLUTTER_REPO="file://${{ github.workspace }}/flutter_chat_module/build/host/outputs/repo"
-          cat > /tmp/flutter-repo.init.gradle << EOF
-          allprojects {
-              repositories {
-                  maven {
-                      url "${FLUTTER_REPO}"
-                  }
-              }
-          }
-          EOF
-          cat /tmp/flutter-repo.init.gradle
-          gradle --init-script /tmp/flutter-repo.init.gradle :sdk:publish \
+          gradle :sdk:publish \
             -PMAVEN_REPO_URL="file://$PWD/build/maven-repo" \
             -PSDK_VERSION=${{ env.VERSION }}
 
