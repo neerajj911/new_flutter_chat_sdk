@@ -15,6 +15,7 @@ flutter_chat_module/pubspec.lock
 local.properties
 **/build/
 native-android-sdk/sdk/libs/
+native-android-sdk/flutter-repo/
 KotlinDemoApp/app/libs/
 
 # AAR files — built in CI, never committed

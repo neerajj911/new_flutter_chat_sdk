@@ -42,16 +42,14 @@ jobs:
         run: |
           flutter build aar --no-profile --no-debug --build-number 1
 
-      - name: Copy Flutter AAR to SDK libs
+      - name: Copy Flutter maven repo to native SDK
         run: |
-          mkdir -p native-android-sdk/sdk/libs
           echo "=== Flutter AAR repo contents ==="
-          find flutter_chat_module/build/host/outputs/repo -name '*.aar' -type f
-          # Find and copy the release AAR
-          AAR_FILE=$(find flutter_chat_module/build/host/outputs/repo -name 'flutter_release-*.aar' -type f | head -1)
-          echo "Found AAR: $AAR_FILE"
-          cp "$AAR_FILE" native-android-sdk/sdk/libs/flutter_release.aar
-          ls -la native-android-sdk/sdk/libs/
+          find flutter_chat_module/build/host/outputs/repo -type f
+          # Copy the ENTIRE local maven repo output (includes AAR + POM + engine dep refs)
+          cp -r flutter_chat_module/build/host/outputs/repo native-android-sdk/flutter-repo
+          echo "=== Copied to native-android-sdk/flutter-repo ==="
+          find native-android-sdk/flutter-repo -type f
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
