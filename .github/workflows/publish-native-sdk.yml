@@ -55,6 +55,14 @@ jobs:
           find flutter_chat_module/build/host/outputs/repo -type f
           cp -r flutter_chat_module/build/host/outputs/repo native-android-sdk/flutter-repo
 
+      - name: Detect Flutter module AAR version
+        run: |
+          # The version Flutter publishes to Maven equals the pubspec version string.
+          # Read it from the actual directory created by 'flutter build aar'.
+          FLUTTER_MODULE_VERSION=$(ls flutter_chat_module/build/host/outputs/repo/com/flutterchat/module/flutter_release/ | head -1)
+          echo "FLUTTER_MODULE_VERSION=$FLUTTER_MODULE_VERSION" >> $GITHUB_ENV
+          echo "Flutter module AAR version: $FLUTTER_MODULE_VERSION"
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -66,7 +74,8 @@ jobs:
           gradle :sdk:publish \
             -PMAVEN_REPO_URL="file://$PWD/build/maven-repo" \
             -PSDK_VERSION=${{ env.VERSION }} \
-            -PFLUTTER_ENGINE_VERSION="${{ env.FLUTTER_ENGINE_VERSION }}"
+            -PFLUTTER_ENGINE_VERSION="${{ env.FLUTTER_ENGINE_VERSION }}" \
+            -PFLUTTER_MODULE_VERSION="${{ env.FLUTTER_MODULE_VERSION }}"
 
       - name: Deploy to GitHub Pages (gh-pages branch)
         run: |
