@@ -32,13 +32,14 @@ android {
 
 dependencies {
     // Flutter module AAR (resolved from its local maven repo built by 'flutter build aar')
-    releaseImplementation 'com.flutterchat.module:flutter_release:+'
+    // Version 1.0 = build-number 1 from 'flutter build aar --build-number 1'
+    releaseImplementation 'com.flutterchat.module:flutter_release:1.0'
 
-    // Flutter engine transitive dependencies
-    releaseImplementation 'io.flutter:flutter_embedding_release:1.0.0-+'
-    releaseImplementation 'io.flutter:armeabi_v7a_release:1.0.0-+'
-    releaseImplementation 'io.flutter:arm64_v8a_release:1.0.0-+'
-    releaseImplementation 'io.flutter:x86_64_release:1.0.0-+'
+    // Flutter engine transitive dependencies (version resolved from storage.googleapis.com)
+    releaseImplementation 'io.flutter:flutter_embedding_release:[1.0,)'
+    releaseImplementation 'io.flutter:armeabi_v7a_release:[1.0,)'
+    releaseImplementation 'io.flutter:arm64_v8a_release:[1.0,)'
+    releaseImplementation 'io.flutter:x86_64_release:[1.0,)'
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
