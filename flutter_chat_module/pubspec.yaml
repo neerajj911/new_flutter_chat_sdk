@@ -1,0 +1,16 @@
+name: flutter_chat_module
+description: A Flutter module providing chat UI for native Android SDK integration.
+version: 1.0.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  module:
+    androidPackage: com.flutterchat.module
+    iosBundleIdentifier: com.flutterchat.module
+  uses-material-design: true

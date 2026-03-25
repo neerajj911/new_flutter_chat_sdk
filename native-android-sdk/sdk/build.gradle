@@ -1,0 +1,83 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+
+android {
+    namespace 'com.flutterchat.sdk'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 34
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    // Flutter AAR (built in CI and copied to libs/)
+    implementation(name: 'flutter_release-1', ext: 'aar')
+
+    // Flutter engine transitive dependencies
+    releaseImplementation 'io.flutter:flutter_embedding_release:1.0.0-+'
+    releaseImplementation 'io.flutter:armeabi_v7a_release:1.0.0-+'
+    releaseImplementation 'io.flutter:arm64_v8a_release:1.0.0-+'
+    releaseImplementation 'io.flutter:x86_64_release:1.0.0-+'
+
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+def mavenRepoUrl = project.hasProperty('MAVEN_REPO_URL')
+        ? project.property('MAVEN_REPO_URL')
+        : "file://${buildDir}/maven-repo"
+
+def sdkVersion = project.hasProperty('SDK_VERSION')
+        ? project.property('SDK_VERSION')
+        : '0.0.1-SNAPSHOT'
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.flutterchat'
+                artifactId = 'chat-sdk'
+                version = sdkVersion
+
+                pom {
+                    name = 'Flutter Chat SDK'
+                    description = 'A native Android SDK wrapping a Flutter chat module'
+                }
+            }
+        }
+        repositories {
+            maven {
+                url = mavenRepoUrl
+            }
+        }
+    }
+}

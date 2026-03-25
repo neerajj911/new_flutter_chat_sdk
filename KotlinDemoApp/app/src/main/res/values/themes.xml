@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.KotlinDemoApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/design_default_color_primary</item>
+        <item name="colorPrimaryVariant">@color/design_default_color_primary_dark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+    </style>
+</resources>

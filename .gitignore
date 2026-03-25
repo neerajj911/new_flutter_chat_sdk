@@ -1,0 +1,32 @@
+# Flutter
+flutter_chat_module/.dart_tool/
+flutter_chat_module/.packages
+flutter_chat_module/.flutter-plugins
+flutter_chat_module/.flutter-plugins-dependencies
+flutter_chat_module/build/
+flutter_chat_module/.pub-cache/
+flutter_chat_module/.pub/
+flutter_chat_module/pubspec.lock
+
+# Android / Gradle
+*.iml
+*.hprof
+.gradle/
+local.properties
+**/build/
+native-android-sdk/sdk/libs/
+KotlinDemoApp/app/libs/
+
+# AAR files — built in CI, never committed
+*.aar
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
