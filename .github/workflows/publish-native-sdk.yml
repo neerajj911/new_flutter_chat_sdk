@@ -97,11 +97,13 @@ jobs:
           # Copy native SDK maven artifacts
           cp -r native-android-sdk/build/maven-repo/* maven/
 
+          touch .nojekyll
+
           # Commit and push
-          git add maven/
+          git add maven/ .nojekyll
           git commit -m "Publish SDK v${{ env.VERSION }}" || echo "No changes to commit"
           git push --force origin gh-pages
-
+          
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
