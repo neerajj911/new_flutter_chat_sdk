@@ -42,6 +42,11 @@ jobs:
         run: |
           flutter build aar --no-profile --no-debug --build-number 1
 
+      - name: Inspect Flutter AAR output
+        run: |
+          echo "=== Flutter AAR repo contents ==="
+          find flutter_chat_module/build/host/outputs/repo -type f | head -50
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -52,8 +57,8 @@ jobs:
         run: |
           FLUTTER_REPO="file://${{ github.workspace }}/flutter_chat_module/build/host/outputs/repo"
           gradle :sdk:publish \
-            -PFLUTTER_MODULE_REPO=$FLUTTER_REPO \
-            -PMAVEN_REPO_URL=file://$PWD/build/maven-repo \
+            -PFLUTTER_MODULE_REPO="$FLUTTER_REPO" \
+            -PMAVEN_REPO_URL="file://$PWD/build/maven-repo" \
             -PSDK_VERSION=${{ env.VERSION }}
 
       - name: Deploy to GitHub Pages (gh-pages branch)
