@@ -100,7 +100,7 @@ jobs:
           # Commit and push
           git add maven/
           git commit -m "Publish SDK v${{ env.VERSION }}" || echo "No changes to commit"
-          git push origin gh-pages
+          git push --force origin gh-pages
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
