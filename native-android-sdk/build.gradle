@@ -17,7 +17,7 @@ allprojects {
         mavenCentral()
         maven { url "https://storage.googleapis.com/download.flutter.io" }
         // Local Flutter module maven repo (copied from flutter build aar output in CI)
-        maven { url "$rootDir/flutter-repo" }
+        maven { url file("$rootDir/flutter-repo") }
     }
 }
 

@@ -31,12 +31,26 @@ android {
 }
 
 dependencies {
-    // Flutter module — the entire maven repo from 'flutter build aar' is at ../flutter-repo/
-    // This pulls in the Flutter engine deps transitively
+    // Flutter module AAR — resolved from local flutter-repo/ copied by CI
     implementation 'com.flutterchat.module:flutter_release:1.0'
 
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
+}
+
+// Pin io.flutter transitive deps to the EXACT engine version.
+// 'storage.googleapis.com' has no maven-metadata.xml, so '+' wildcard CAN'T resolve.
+// CI passes -PFLUTTER_ENGINE_VERSION=1.0.0-<hash> from 'flutter --version'.
+if (project.hasProperty('FLUTTER_ENGINE_VERSION')) {
+    def engineVer = project.property('FLUTTER_ENGINE_VERSION').toString()
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'io.flutter') {
+                details.useVersion(engineVer)
+                details.because('Pin to exact Flutter engine version for storage.googleapis.com')
+            }
+        }
+    }
 }
 
 def mavenRepoUrl = project.hasProperty('MAVEN_REPO_URL')

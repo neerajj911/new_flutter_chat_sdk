@@ -42,14 +42,18 @@ jobs:
         run: |
           flutter build aar --no-profile --no-debug --build-number 1
 
+      - name: Get exact Flutter engine version
+        run: |
+          ENGINE_REV=$(flutter --version --machine | python3 -c "import sys,json; v=json.load(sys.stdin); print(v['engineRevision'])")
+          FLUTTER_ENGINE_VERSION="1.0.0-${ENGINE_REV}"
+          echo "FLUTTER_ENGINE_VERSION=$FLUTTER_ENGINE_VERSION" >> $GITHUB_ENV
+          echo "Flutter engine version: $FLUTTER_ENGINE_VERSION"
+
       - name: Copy Flutter maven repo to native SDK
         run: |
           echo "=== Flutter AAR repo contents ==="
           find flutter_chat_module/build/host/outputs/repo -type f
-          # Copy the ENTIRE local maven repo output (includes AAR + POM + engine dep refs)
           cp -r flutter_chat_module/build/host/outputs/repo native-android-sdk/flutter-repo
-          echo "=== Copied to native-android-sdk/flutter-repo ==="
-          find native-android-sdk/flutter-repo -type f
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -61,7 +65,8 @@ jobs:
         run: |
           gradle :sdk:publish \
             -PMAVEN_REPO_URL="file://$PWD/build/maven-repo" \
-            -PSDK_VERSION=${{ env.VERSION }}
+            -PSDK_VERSION=${{ env.VERSION }} \
+            -PFLUTTER_ENGINE_VERSION="${{ env.FLUTTER_ENGINE_VERSION }}"
 
       - name: Deploy to GitHub Pages (gh-pages branch)
         run: |
