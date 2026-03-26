@@ -127,7 +127,7 @@ jobs:
           body: |
             ## Flutter Chat SDK v${{ env.VERSION }}
 
-            ### Installation
+            ### Native Android (Kotlin/Java) Integration
 
             Add to your `build.gradle` repositories:
             ```groovy
@@ -138,5 +138,28 @@ jobs:
             Add the dependency:
             ```groovy
             implementation 'com.flutterchat:chat-sdk:${{ env.VERSION }}'
+            ```
+
+            ### Flutter App Integration
+
+            Add to your `pubspec.yaml` under `dependencies`:
+            ```yaml
+            flutter_chat_module:
+              git:
+                url: https://github.com/${{ github.repository }}.git
+                path: flutter_chat_module
+                ref: v${{ env.VERSION }}
+            ```
+
+            Then use in Dart:
+            ```dart
+            import 'package:flutter_chat_module/flutter_chat_sdk.dart';
+
+            FlutterChatSDK.openChat(
+              context: context,
+              userId: 'user@example.com',
+              userName: 'John',
+              userEmail: 'user@example.com',
+            );
             ```
           generate_release_notes: true
