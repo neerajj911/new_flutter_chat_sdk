@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_chat_module/flutter_chat_module.dart';
+import 'package:flutter_chat_module/flutter_chat_sdk.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,13 +44,13 @@ class _UserFormScreenState extends State<UserFormScreen> {
       final name = _nameController.text.trim();
       final email = _emailController.text.trim();
 
-      // ✅ Use SDK instead of direct navigation
-      // FlutterChatModule.openChat(
-      //   context: context,
-      //   userId: email,
-      //   userName: name,
-      //   userEmail: email,
-      // );
+      // Use the SDK's public API — same pattern as native Kotlin side
+      FlutterChatSDK.openChat(
+        context: context,
+        userId: email,
+        userName: name,
+        userEmail: email,
+      );
     }
   }
 
@@ -90,5 +90,3 @@ class _UserFormScreenState extends State<UserFormScreen> {
     );
   }
 }
-
-
