@@ -58,9 +58,9 @@ class _ChatScreenState extends State<ChatScreen> {
         // Add a welcome message
         _addMessage(ChatMessage(
           id: 'welcome',
-          text: 'Hey ${user.name}! v1.0.4 - Ready to chat 🚀',
+          text: '👋 Hello ${user.name}! Welcome to FlutterChat v1.0.6',
           senderId: 'system',
-          senderName: 'System',
+          senderName: 'FlutterChat',
           timestamp: DateTime.now(),
           isMe: false,
         ));
@@ -116,9 +116,9 @@ class _ChatScreenState extends State<ChatScreen> {
       if (mounted) {
         _addMessage(ChatMessage(
           id: '${DateTime.now().millisecondsSinceEpoch}_reply',
-          text: 'Got your message! Auto-reply from v1.0.4.',
+          text: '🤖 Auto-reply v1.0.6: Got your message!',
           senderId: 'bot',
-          senderName: 'FlutterChat Bot', // v1.0.4
+          senderName: 'FlutterChat Bot',
           timestamp: DateTime.now(),
           isMe: false,
         ));
@@ -137,13 +137,25 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF6200EE),
+        foregroundColor: Colors.white,
         title: Text(_isInitialized
-            ? 'Chatting with username - ${_currentUser?.name ?? ""}'
-            : 'Flutter Chat'),
-        elevation: 1,
+            ? '💬 ${_currentUser?.name ?? ""}'
+            : 'FlutterChat v1.0.6'),
+        elevation: 4,
       ),
       body: Column(
         children: [
+          Container(
+            width: double.infinity,
+            color: const Color(0xFFEDE7F6),
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: const Text(
+              'FlutterChat SDK v1.0.6',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 11, color: Color(0xFF6200EE)),
+            ),
+          ),
           Expanded(
             child: _messages.isEmpty
                 ? const Center(
