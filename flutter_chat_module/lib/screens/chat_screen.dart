@@ -58,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // Add a welcome message
         _addMessage(ChatMessage(
           id: 'welcome',
-          text: 'Welcome, ${user.name}! Start chatting.',
+          text: 'Hey ${user.name}! v1.0.4 - Ready to chat 🚀',
           senderId: 'system',
           senderName: 'System',
           timestamp: DateTime.now(),
@@ -116,9 +116,9 @@ class _ChatScreenState extends State<ChatScreen> {
       if (mounted) {
         _addMessage(ChatMessage(
           id: '${DateTime.now().millisecondsSinceEpoch}_reply',
-          text: 'Thanks for your message! This is an auto-reply.',
+          text: 'Got your message! Auto-reply from v1.0.4.',
           senderId: 'bot',
-          senderName: 'Chat Bot here',
+          senderName: 'FlutterChat Bot', // v1.0.4
           timestamp: DateTime.now(),
           isMe: false,
         ));
