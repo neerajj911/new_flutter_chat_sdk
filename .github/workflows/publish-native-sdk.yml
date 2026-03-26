@@ -40,7 +40,7 @@ jobs:
       - name: Build Flutter AAR
         working-directory: flutter_chat_module
         run: |
-          flutter build aar --no-profile --no-debug --build-number 1
+          flutter build aar --no-profile --no-debug --build-name ${{ env.VERSION }} --build-number 1
 
       - name: Get exact Flutter engine version
         run: |
