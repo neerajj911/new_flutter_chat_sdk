@@ -138,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isInitialized
-            ? 'Chat - ${_currentUser?.name ?? ""}'
+            ? 'Chatting with username - ${_currentUser?.name ?? ""}'
             : 'Flutter Chat'),
         elevation: 1,
       ),
