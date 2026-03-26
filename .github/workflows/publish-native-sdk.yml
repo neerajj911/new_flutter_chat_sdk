@@ -40,6 +40,8 @@ jobs:
       - name: Build Flutter AAR
         working-directory: flutter_chat_module
         run: |
+          # Inject SDK version into version.dart so UI shows correct version
+          echo "const String sdkVersion = '${{ env.VERSION }}';" > lib/version.dart
           flutter build aar --no-profile --no-debug --build-number ${{ env.VERSION }}
 
       - name: Get exact Flutter engine version

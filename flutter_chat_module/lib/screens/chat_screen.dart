@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/chat_message.dart';
 import '../models/chat_user.dart';
 import '../services/platform_channel.dart';
+import '../version.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/message_input.dart';
 
@@ -27,7 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _isInitialized = true;
       _addMessage(ChatMessage(
         id: 'welcome',
-        text: '👋 Hello ${widget.user!.name}! Welcome to FlutterChat v1.0.6',
+        text:
+            '👋 Hello ${widget.user!.name}! Welcome to FlutterChat v$sdkVersion',
         senderId: 'system',
         senderName: 'FlutterChat',
         timestamp: DateTime.now(),
@@ -48,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // Add a welcome message
         _addMessage(ChatMessage(
           id: 'welcome',
-          text: '👋 Hello ${user.name}! Welcome to FlutterChat v1.0.6',
+          text: '👋 Hello ${user.name}! Welcome to FlutterChat v$sdkVersion',
           senderId: 'system',
           senderName: 'FlutterChat',
           timestamp: DateTime.now(),
@@ -106,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (mounted) {
         _addMessage(ChatMessage(
           id: '${DateTime.now().millisecondsSinceEpoch}_reply',
-          text: '🤖 Auto-reply v1.0.6: Got your message!',
+          text: '🤖 Auto-reply v$sdkVersion: Got your message!',
           senderId: 'bot',
           senderName: 'FlutterChat Bot',
           timestamp: DateTime.now(),
@@ -131,7 +133,7 @@ class _ChatScreenState extends State<ChatScreen> {
         foregroundColor: Colors.white,
         title: Text(_isInitialized
             ? '💬 ${_currentUser?.name ?? ""}'
-            : 'FlutterChat v1.0.6'),
+            : 'FlutterChat v$sdkVersion'),
         elevation: 4,
       ),
       body: Column(
@@ -140,8 +142,8 @@ class _ChatScreenState extends State<ChatScreen> {
             width: double.infinity,
             color: const Color(0xFFEDE7F6),
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: const Text(
-              'FlutterChat SDK v1.0.6',
+            child: Text(
+              'FlutterChat SDK v$sdkVersion',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 11, color: Color(0xFF6200EE)),
             ),
