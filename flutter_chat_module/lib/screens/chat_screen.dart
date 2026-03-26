@@ -129,16 +129,34 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF00897B),
+        backgroundColor: const Color(0xFFE65100),
         foregroundColor: Colors.white,
         title: _isInitialized
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ? Row(
                 children: [
-                  Text('💬 ${_currentUser?.name ?? ""}',
-                      style: const TextStyle(fontSize: 16)),
-                  Text('${_messages.length} messages',
-                      style: const TextStyle(fontSize: 11, color: Colors.white70)),
+                  const CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Colors.white24,
+                    child: Icon(Icons.person, size: 18, color: Colors.white),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${_currentUser?.name ?? ""}',
+                          style: const TextStyle(fontSize: 15)),
+                      Row(
+                        children: const [
+                          CircleAvatar(
+                              radius: 4, backgroundColor: Colors.greenAccent),
+                          SizedBox(width: 4),
+                          Text('Online',
+                              style: TextStyle(
+                                  fontSize: 11, color: Colors.white70)),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               )
             : Text('FlutterChat v$sdkVersion'),
@@ -148,12 +166,12 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Container(
             width: double.infinity,
-            color: const Color(0xFFE0F2F1),
+            color: const Color(0xFFFBE9E7),
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
-              'FlutterChat SDK v$sdkVersion',
+              '🔥 FlutterChat SDK v$sdkVersion',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 11, color: Color(0xFF00897B)),
+              style: TextStyle(fontSize: 11, color: Color(0xFFE65100)),
             ),
           ),
           Expanded(
@@ -162,14 +180,19 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.chat_bubble_outline,
-                            size: 48, color: Colors.teal),
+                        Icon(Icons.forum_outlined,
+                            size: 56, color: Colors.deepOrange),
                         SizedBox(height: 12),
                         Text(
-                          'No messages yet.\nSay hello! 👋',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
+                          'Start the conversation! 🔥',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.deepOrange),
                         ),
+                        SizedBox(height: 4),
+                        Text('Type a message below',
+                            style: TextStyle(color: Colors.grey, fontSize: 13)),
                       ],
                     ),
                   )
