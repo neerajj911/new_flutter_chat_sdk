@@ -118,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
           id: '${DateTime.now().millisecondsSinceEpoch}_reply',
           text: 'Thanks for your message! This is an auto-reply.',
           senderId: 'bot',
-          senderName: 'Chat Bot',
+          senderName: 'Chat Bot here',
           timestamp: DateTime.now(),
           isMe: false,
         ));
