@@ -54,7 +54,7 @@
           "group": "com.flutterchat.module",
           "module": "flutter_release",
           "version": {
-            "requires": "1"
+            "requires": "1.0.4"
           }
         },
         {

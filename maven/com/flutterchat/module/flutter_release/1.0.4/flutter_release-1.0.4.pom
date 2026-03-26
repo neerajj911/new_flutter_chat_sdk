@@ -7,36 +7,34 @@
   <!-- that they should prefer consuming it instead. -->
   <!-- do_not_remove: published-with-gradle-metadata -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.flutterchat</groupId>
-  <artifactId>chat-sdk</artifactId>
+  <groupId>com.flutterchat.module</groupId>
+  <artifactId>flutter_release</artifactId>
   <version>1.0.4</version>
   <packaging>aar</packaging>
-  <name>Flutter Chat SDK</name>
-  <description>A native Android SDK wrapping a Flutter chat module</description>
   <dependencies>
     <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
-      <version>1.9.22</version>
+      <groupId>io.flutter</groupId>
+      <artifactId>flutter_embedding_release</artifactId>
+      <version>1.0.0-052f31d115eceda8cbff1b3481fcde4330c4ae12</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>com.flutterchat.module</groupId>
-      <artifactId>flutter_release</artifactId>
-      <version>1.0.4</version>
-      <scope>runtime</scope>
+      <groupId>io.flutter</groupId>
+      <artifactId>armeabi_v7a_release</artifactId>
+      <version>1.0.0-052f31d115eceda8cbff1b3481fcde4330c4ae12</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>androidx.core</groupId>
-      <artifactId>core-ktx</artifactId>
-      <version>1.12.0</version>
-      <scope>runtime</scope>
+      <groupId>io.flutter</groupId>
+      <artifactId>arm64_v8a_release</artifactId>
+      <version>1.0.0-052f31d115eceda8cbff1b3481fcde4330c4ae12</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>androidx.appcompat</groupId>
-      <artifactId>appcompat</artifactId>
-      <version>1.6.1</version>
-      <scope>runtime</scope>
+      <groupId>io.flutter</groupId>
+      <artifactId>x86_64_release</artifactId>
+      <version>1.0.0-052f31d115eceda8cbff1b3481fcde4330c4ae12</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
