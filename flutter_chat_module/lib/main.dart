@@ -15,7 +15,7 @@ class FlutterChatApp extends StatelessWidget {
       title: 'Flutter Chat',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
-      home: const ChatScreen(),
+      home: ChatScreen(),
     );
   }
 }

@@ -31,7 +31,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://<username>.github.io/flutter-chat-sdk/maven" }
+        maven { url "https://neerajj911.github.io/new_flutter_chat_sdk/maven" }
         maven { url "https://storage.googleapis.com/download.flutter.io" }
     }
 }

@@ -17,10 +17,8 @@ allprojects {
         google()
         mavenCentral()
         // Flutter engine transitive dependencies
+        maven { url "https://neerajj911.github.io/new_flutter_chat_sdk/maven" }
         maven { url "https://storage.googleapis.com/download.flutter.io" }
-        // Flutter Chat SDK from GitHub Pages Maven repo
-        // TODO: Replace <username> and <repo> with your actual GitHub username and repo name
-        maven { url "https://<username>.github.io/flutter-chat-sdk/maven" }
     }
 }
 

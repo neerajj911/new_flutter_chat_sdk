@@ -6,7 +6,8 @@ import '../widgets/chat_bubble.dart';
 import '../widgets/message_input.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  // final ChatUser? user;
+  // const ChatScreen(this.user, {super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -23,6 +24,29 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _initPlatformChannel();
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   if (widget.user != null) {
+  //     // ✅ Flutter direct usage
+  //     _currentUser = widget.user;
+  //     _isInitialized = true;
+
+  //     _addMessage(ChatMessage(
+  //       id: 'welcome',
+  //       text: 'Welcome, ${widget.user!.name}!',
+  //       senderId: 'system',
+  //       senderName: 'System',
+  //       timestamp: DateTime.now(),
+  //       isMe: false,
+  //     ));
+  //   } else {
+  //     // ✅ Kotlin / Native flow
+  //     _initPlatformChannel();
+  //   }
+  // }
 
   void _initPlatformChannel() {
     PlatformChannel.init(
