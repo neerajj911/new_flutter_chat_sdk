@@ -84,20 +84,23 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
 
-          # Fetch gh-pages or create it
+          # Save artifacts to /tmp BEFORE switching branches
+          mkdir -p /tmp/maven-artifacts
+          cp -r flutter_chat_module/build/host/outputs/repo/* /tmp/maven-artifacts/
+          cp -r native-android-sdk/build/maven-repo/* /tmp/maven-artifacts/
+
+          # Fetch and switch to gh-pages (create orphan if first time)
           git fetch origin gh-pages || true
-          git checkout gh-pages || git checkout --orphan gh-pages
+          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
 
-          # Ensure maven/ exists — do NOT wipe it so older versions are preserved
+          # Hard-reset to remote so we are always fast-forwardable
+          git reset --hard origin/gh-pages 2>/dev/null || true
+
+          # Merge new artifacts — older version dirs are untouched
           mkdir -p maven
-
-          # Overwrite only this version's artifacts; all other versions stay untouched
-          cp -r flutter_chat_module/build/host/outputs/repo/* maven/
-          cp -r native-android-sdk/build/maven-repo/* maven/
-
+          cp -r /tmp/maven-artifacts/* maven/
           touch .nojekyll
 
-          # Commit and push (no --force so older version dirs are never removed)
           git add maven/ .nojekyll
           git commit -m "Publish SDK v${{ env.VERSION }}" || echo "No changes to commit"
           git push origin gh-pages
