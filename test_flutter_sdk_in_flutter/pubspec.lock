@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: async
-      sha256: "758e6d74e971c3e5aceb4110bfd6698efc7f501675bcfe0c775459a8140750eb"
+      sha256: e2eb0491ba5ddb6177742d2da23904574082139b07c1e33b8503b9f46f3e1a37
       url: "https://pub.dev"
     source: hosted
-    version: "2.13.0"
+    version: "2.13.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -66,8 +66,8 @@ packages:
     dependency: "direct main"
     description:
       path: flutter_chat_module
-      ref: main
-      resolved-ref: "2749e297ec26449f0cc14b6e9f44b3dbfead3a95"
+      ref: "v1.0.8"
+      resolved-ref: ccc0ab4a8af79cdd970870a094228f17dec5b51c
       url: "https://github.com/neerajj911/new_flutter_chat_sdk.git"
     source: git
     version: "1.0.0"
