@@ -88,22 +88,27 @@ jobs:
           git fetch origin gh-pages || true
           git checkout gh-pages || git checkout --orphan gh-pages
 
-          # Clean working tree but keep maven/ directory
-          git rm -rf . || true
+          # Ensure maven/ exists — do NOT wipe it so older versions are preserved
           mkdir -p maven
 
-          # Copy Flutter module maven artifacts (so consumers can resolve transitive deps)
+          # Overwrite only this version's artifacts; all other versions stay untouched
           cp -r flutter_chat_module/build/host/outputs/repo/* maven/
-          # Copy native SDK maven artifacts
           cp -r native-android-sdk/build/maven-repo/* maven/
 
           touch .nojekyll
 
-          # Commit and push
+          # Commit and push (no --force so older version dirs are never removed)
           git add maven/ .nojekyll
           git commit -m "Publish SDK v${{ env.VERSION }}" || echo "No changes to commit"
-          git push --force origin gh-pages
-          
+          git push origin gh-pages
+
+      - name: Delete existing release and tag if re-running same version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete "v${{ env.VERSION }}" --yes || true
+          git push origin --delete "v${{ env.VERSION }}" || true
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
