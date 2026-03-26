@@ -2,6 +2,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://neerajj911.github.io/new_flutter_chat_sdk/maven") }
+        maven { url = uri("https://storage.googleapis.com/download.flutter.io") }
     }
 }
 

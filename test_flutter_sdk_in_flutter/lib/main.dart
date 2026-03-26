@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_module/flutter_chat_sdk.dart';
+import 'package:flutter/services.dart';
+
+const _launcherChannel = MethodChannel('com.flutterchat.sdk/launcher');
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +21,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// ---------------------------------------------------------------------------
+// User form screen
+// ---------------------------------------------------------------------------
 
 class UserFormScreen extends StatefulWidget {
   const UserFormScreen({super.key});
@@ -44,13 +50,12 @@ class _UserFormScreenState extends State<UserFormScreen> {
       final name = _nameController.text.trim();
       final email = _emailController.text.trim();
 
-      // Use the SDK's public API — same pattern as native Kotlin side
-      FlutterChatSDK.openChat(
-        context: context,
-        userId: email,
-        userName: name,
-        userEmail: email,
-      );
+      // Send openChat to native via MethodChannel
+      _launcherChannel.invokeMethod('openChat', {
+        'id': email,
+        'name': name,
+        'email': email,
+      });
     }
   }
 

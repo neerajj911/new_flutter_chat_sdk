@@ -62,15 +62,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_chat_module:
-    dependency: "direct main"
-    description:
-      path: flutter_chat_module
-      ref: "v1.0.8"
-      resolved-ref: ccc0ab4a8af79cdd970870a094228f17dec5b51c
-      url: "https://github.com/neerajj911/new_flutter_chat_sdk.git"
-    source: git
-    version: "1.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:

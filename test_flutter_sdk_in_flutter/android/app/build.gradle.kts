@@ -39,6 +39,22 @@ android {
     }
 }
 
+dependencies {
+    // Native chat SDK — exclude io.flutter to avoid conflict with the Flutter app's own engine
+    implementation("com.flutterchat:chat-sdk:1.0.8") {
+        exclude(group = "io.flutter")
+    }
+}
+
+// Force all io.flutter deps to use the engine version provided by the Flutter Gradle plugin
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "io.flutter") {
+            useVersion(requested.version!!)
+        }
+    }
+}
+
 flutter {
     source = "../.."
 }
