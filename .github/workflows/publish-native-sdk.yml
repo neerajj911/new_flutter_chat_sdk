@@ -111,11 +111,15 @@ jobs:
         run: |
           gh release delete "v${{ env.VERSION }}" --yes || true
           git push origin --delete "v${{ env.VERSION }}" || true
+          # Create a lightweight tag on the main branch SHA this workflow ran from
+          git tag "v${{ env.VERSION }}" ${{ github.sha }}
+          git push origin "v${{ env.VERSION }}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: "v${{ env.VERSION }}"
+          target_commitish: ${{ github.sha }}
           name: "Flutter Chat SDK v${{ env.VERSION }}"
           body: |
             ## Flutter Chat SDK v${{ env.VERSION }}
