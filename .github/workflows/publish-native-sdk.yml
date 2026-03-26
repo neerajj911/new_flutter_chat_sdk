@@ -105,15 +105,12 @@ jobs:
           git commit -m "Publish SDK v${{ env.VERSION }}" || echo "No changes to commit"
           git push origin gh-pages
 
-      - name: Delete existing release and tag if re-running same version
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete "v${{ env.VERSION }}" --yes || true
-          git push origin --delete "v${{ env.VERSION }}" || true
-          # Create a lightweight tag on the main branch SHA this workflow ran from
-          git tag "v${{ env.VERSION }}" ${{ github.sha }}
-          git push origin "v${{ env.VERSION }}"
+          # Delete existing release (not the tag!) if re-publishing Maven artifacts
+          gh release delete "v${{ env.VERSION }}" --yes 2>/dev/null || true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

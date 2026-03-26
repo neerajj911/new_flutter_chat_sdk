@@ -38,7 +38,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-
   void _initPlatformChannel() {
     PlatformChannel.init(
       onUserDataReceived: (user) {
@@ -49,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // Add a welcome message
         _addMessage(ChatMessage(
           id: 'welcome',
-          text: '👋 Hello ${user.name}! Welcome to FlutterChat v1.0.6',
+          text: '👋 Hello ${user.name}! Welcome to FlutterChat v1.0.4',
           senderId: 'system',
           senderName: 'FlutterChat',
           timestamp: DateTime.now(),
@@ -107,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (mounted) {
         _addMessage(ChatMessage(
           id: '${DateTime.now().millisecondsSinceEpoch}_reply',
-          text: '🤖 Auto-reply v1.0.6: Got your message!',
+          text: '🤖 Auto-reply v1.0.4: Got your message!',
           senderId: 'bot',
           senderName: 'FlutterChat Bot',
           timestamp: DateTime.now(),
@@ -128,23 +127,23 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF6200EE),
+        backgroundColor: const Color(0xFF2196F3),
         foregroundColor: Colors.white,
         title: Text(_isInitialized
             ? '💬 ${_currentUser?.name ?? ""}'
-            : 'FlutterChat v1.0.6'),
+            : 'FlutterChat v1.0.4'),
         elevation: 4,
       ),
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            color: const Color(0xFFEDE7F6),
+            color: const Color(0xFFE3F2FD),
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: const Text(
-              'FlutterChat SDK v1.0.6',
+              'FlutterChat SDK v1.0.4',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 11, color: Color(0xFF6200EE)),
+              style: TextStyle(fontSize: 11, color: Color(0xFF2196F3)),
             ),
           ),
           Expanded(
