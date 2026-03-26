@@ -111,8 +111,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Delete existing release (not the tag!) if re-publishing Maven artifacts
+          # Delete existing release if re-publishing
           gh release delete "v${{ env.VERSION }}" --yes 2>/dev/null || true
+          # Force-update the git tag to current commit so Flutter consumers also get new code
+          git push origin --delete "v${{ env.VERSION }}" 2>/dev/null || true
+          git tag -f "v${{ env.VERSION }}" ${{ github.sha }}
+          git push origin "v${{ env.VERSION }}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
