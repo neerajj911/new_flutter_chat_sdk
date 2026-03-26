@@ -40,9 +40,7 @@ jobs:
       - name: Build Flutter AAR
         working-directory: flutter_chat_module
         run: |
-          # Set pubspec.yaml version to match SDK version so Maven artifact is flutter_release:VERSION
-          sed -i "s/^version:.*/version: ${{ env.VERSION }}/" pubspec.yaml
-          flutter build aar --no-profile --no-debug --build-number 1
+          flutter build aar --no-profile --no-debug --build-number ${{ env.VERSION }}
 
       - name: Get exact Flutter engine version
         run: |
