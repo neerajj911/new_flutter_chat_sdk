@@ -129,32 +129,48 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF6200EE),
+        backgroundColor: const Color(0xFF00897B),
         foregroundColor: Colors.white,
-        title: Text(_isInitialized
-            ? '💬 ${_currentUser?.name ?? ""}'
-            : 'FlutterChat v$sdkVersion'),
+        title: _isInitialized
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('💬 ${_currentUser?.name ?? ""}',
+                      style: const TextStyle(fontSize: 16)),
+                  Text('${_messages.length} messages',
+                      style: const TextStyle(fontSize: 11, color: Colors.white70)),
+                ],
+              )
+            : Text('FlutterChat v$sdkVersion'),
         elevation: 4,
       ),
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            color: const Color(0xFFEDE7F6),
+            color: const Color(0xFFE0F2F1),
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
               'FlutterChat SDK v$sdkVersion',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 11, color: Color(0xFF6200EE)),
+              style: TextStyle(fontSize: 11, color: Color(0xFF00897B)),
             ),
           ),
           Expanded(
             child: _messages.isEmpty
                 ? const Center(
-                    child: Text(
-                      'No messages yet.\nWaiting for initialization...',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.chat_bubble_outline,
+                            size: 48, color: Colors.teal),
+                        SizedBox(height: 12),
+                        Text(
+                          'No messages yet.\nSay hello! 👋',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
                     ),
                   )
                 : ListView.builder(
