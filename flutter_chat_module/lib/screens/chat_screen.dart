@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../models/chat_message.dart';
 import '../models/chat_user.dart';
 import '../services/platform_channel.dart';
-import '../version.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/message_input.dart';
 
@@ -19,17 +19,21 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   ChatUser? _currentUser;
   bool _isInitialized = false;
+  String _sdkVersion = '';
 
   @override
   void initState() {
     super.initState();
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _sdkVersion = info.version);
+    });
     if (widget.user != null) {
       _currentUser = widget.user;
       _isInitialized = true;
       _addMessage(ChatMessage(
         id: 'welcome',
         text:
-            '👋 Hello ${widget.user!.name}! Welcome to FlutterChat v$sdkVersion',
+            '👋 Hello ${widget.user!.name}! Welcome to FlutterChat v$_sdkVersion',
         senderId: 'system',
         senderName: 'FlutterChat',
         timestamp: DateTime.now(),
@@ -50,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // Add a welcome message
         _addMessage(ChatMessage(
           id: 'welcome',
-          text: '👋 Hello ${user.name}! Welcome to FlutterChat v$sdkVersion',
+          text: '👋 Hello ${user.name}! Welcome to FlutterChat v$_sdkVersion',
           senderId: 'system',
           senderName: 'FlutterChat',
           timestamp: DateTime.now(),
@@ -109,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
         _addMessage(ChatMessage(
           id: '${DateTime.now().millisecondsSinceEpoch}_reply',
           text:
-              '💬 Thanks for your message! This is an automated reply from FlutterChat v$sdkVersion.',
+              '💬 Thanks for your message! This is an automated reply from FlutterChat v$_sdkVersion.',
           senderId: 'bot',
           senderName: 'FlutterChat Bot',
           timestamp: DateTime.now(),
@@ -192,7 +196,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ],
               )
-            : Text('FlutterChat v$sdkVersion'),
+            : Text('FlutterChat v$_sdkVersion'),
       ),
       body: Column(
         children: [
@@ -213,7 +217,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     size: 13, color: Color(0xFFE65100)),
                 const SizedBox(width: 4),
                 Text(
-                  'FlutterChat SDK v$sdkVersion',
+                  'FlutterChat SDK v$_sdkVersion',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 11,
