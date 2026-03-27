@@ -98,7 +98,13 @@ jobs:
           # Hard-reset to remote so we are always fast-forwardable
           git reset --hard origin/gh-pages 2>/dev/null || true
 
-          # Merge new artifacts — older version dirs are untouched
+          # Remove this version's artifact directories so same-version re-publish is always clean.
+          # Older version directories are untouched; only the re-published version is wiped and replaced.
+          rm -rf maven/com/flutterchat/module/flutter_release/${{ env.VERSION }} 2>/dev/null || true
+          rm -rf maven/com/flutterchat/chat-sdk/${{ env.VERSION }} 2>/dev/null || true
+          echo "Cleaned up old artifacts for v${{ env.VERSION }} (if any)"
+
+          # Copy fresh artifacts — same-version dirs were just removed, older dirs are untouched
           mkdir -p maven
           cp -r /tmp/maven-artifacts/* maven/
           touch .nojekyll
@@ -140,6 +146,9 @@ jobs:
             implementation 'com.flutterchat:chat-sdk:${{ env.VERSION }}'
             ```
 
+            > **Re-publishing the same version?** Gradle caches resolved artifacts locally.
+            > Run `./gradlew build --refresh-dependencies` to force a fresh download.
+
             ### Flutter App Integration
 
             Add to your `pubspec.yaml` under `dependencies`:
@@ -162,4 +171,7 @@ jobs:
               userEmail: 'user@example.com',
             );
             ```
+
+            > **Re-publishing the same version?** Flutter caches git packages by commit SHA.
+            > Run `flutter pub cache clean && flutter pub get` to pick up the updated tag.
           generate_release_notes: true
