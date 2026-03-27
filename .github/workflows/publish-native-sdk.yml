@@ -129,9 +129,13 @@ jobs:
         run: |
           # Delete existing release if re-publishing
           gh release delete "v${{ env.VERSION }}" --yes 2>/dev/null || true
-          # Force-update the git tag to current commit so Flutter consumers also get new code
+          # Fetch so we see the version.dart commit pushed back to main in the earlier step.
+          # The tag must point to THAT commit (which has the correct version.dart),
+          # not github.sha (the pre-workflow commit that still has the old version.dart).
+          git fetch origin main
+          LATEST_SHA=$(git rev-parse origin/main)
           git push origin --delete "v${{ env.VERSION }}" 2>/dev/null || true
-          git tag -f "v${{ env.VERSION }}" ${{ github.sha }}
+          git tag -f "v${{ env.VERSION }}" "$LATEST_SHA"
           git push origin "v${{ env.VERSION }}"
 
       - name: Create GitHub Release
