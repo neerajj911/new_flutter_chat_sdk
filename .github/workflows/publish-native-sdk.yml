@@ -52,7 +52,7 @@ jobs:
           git add flutter_chat_module/pubspec.yaml flutter_chat_module/lib/version.dart
           git diff --cached --quiet && echo "No version changes to commit" && exit 0
           git commit -m "chore: bump version to ${{ env.VERSION }} [skip ci]"
-          git push origin main
+          git push origin v2-refactored
 
       - name: Get exact Flutter engine version
         run: |
@@ -129,11 +129,11 @@ jobs:
         run: |
           # Delete existing release if re-publishing
           gh release delete "v${{ env.VERSION }}" --yes 2>/dev/null || true
-          # Fetch so we see the version.dart commit pushed back to main in the earlier step.
+          # Fetch so we see the version.dart commit pushed back to v2-refactored in the earlier step.
           # The tag must point to THAT commit (which has the correct version.dart),
           # not github.sha (the pre-workflow commit that still has the old version.dart).
-          git fetch origin main
-          LATEST_SHA=$(git rev-parse origin/main)
+          git fetch origin v2-refactored
+          LATEST_SHA=$(git rev-parse origin/v2-refactored)
           git push origin --delete "v${{ env.VERSION }}" 2>/dev/null || true
           git tag -f "v${{ env.VERSION }}" "$LATEST_SHA"
           git push origin "v${{ env.VERSION }}"
