@@ -41,8 +41,18 @@ jobs:
         working-directory: flutter_chat_module
         run: |
           # Inject SDK version into version.dart so UI shows correct version
-          echo "const String sdkVersion = '${{ env.VERSION }}';" > lib/version.dart
+          echo "/// SDK version — update this before each release." > lib/version.dart
+          echo "const String sdkVersion = '${{ env.VERSION }}';" >> lib/version.dart
           flutter build aar --no-profile --no-debug --build-number ${{ env.VERSION }}
+
+      - name: Commit version.dart back to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add flutter_chat_module/lib/version.dart
+          git diff --cached --quiet && echo "version.dart unchanged, skipping commit" && exit 0
+          git commit -m "chore: bump version.dart to ${{ env.VERSION }} [skip ci]"
+          git push origin main
 
       - name: Get exact Flutter engine version
         run: |
