@@ -65,18 +65,33 @@ class FlutterChatSDK {
   }
 
   /// Open the chat screen for the given user.
-  /// Sends user data to the native layer via MethodChannel.
-  /// The native side must handle 'openChat' on 'com.flutterchat.sdk/launcher'.
+  ///
+  /// - When used in a **standalone Flutter app**, pass [context] for direct navigation.
+  /// - When used **embedded in a native Android/iOS app**, omit [context] — the SDK
+  ///   communicates via MethodChannel (requires [init] to have been called first).
   static void openChat({
+    BuildContext? context,
     required String userId,
     required String userName,
     required String userEmail,
   }) {
-    _channel.invokeMethod('openChat', {
-      'id': userId,
-      'name': userName,
-      'email': userEmail,
-    });
+    if (context != null) {
+      // Flutter-to-Flutter: navigate directly without MethodChannel
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => ChatScreen(
+            user: ChatUser(id: userId, name: userName, email: userEmail),
+          ),
+        ),
+      );
+    } else {
+      // Embedded in native: send to native layer via MethodChannel
+      _channel.invokeMethod('openChat', {
+        'id': userId,
+        'name': userName,
+        'email': userEmail,
+      });
+    }
   }
 
   /// Get the current callback (used internally by ChatScreen).
