@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import '../models/chat_message.dart';
 import '../models/chat_user.dart';
-import '../services/platform_channel.dart';
 import '../version.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/message_input.dart';
 
+/// Callback when user sends a message.
+typedef OnMessageSent = void Function(ChatMessage message);
+
 class ChatScreen extends StatefulWidget {
-  final ChatUser? user;
-  const ChatScreen({this.user, super.key});
+  final ChatUser user;
+  final OnMessageSent? onMessageSent;
+
+  const ChatScreen({required this.user, this.onMessageSent, super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -17,53 +21,20 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final List<ChatMessage> _messages = [];
   final ScrollController _scrollController = ScrollController();
-  ChatUser? _currentUser;
-  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.user != null) {
-      _currentUser = widget.user;
-      _isInitialized = true;
-      _addMessage(ChatMessage(
+    _addMessage(
+      ChatMessage(
         id: 'welcome',
         text:
-            '👋 Hello ${widget.user!.name}! Welcome to FlutterChat v$sdkVersion',
+            '👋 Hello ${widget.user.name}! Welcome to FlutterChat v$sdkVersion',
         senderId: 'system',
         senderName: 'FlutterChat',
         timestamp: DateTime.now(),
         isMe: false,
-      ));
-    } else {
-      _initPlatformChannel();
-    }
-  }
-
-  void _initPlatformChannel() {
-    PlatformChannel.init(
-      onUserDataReceived: (user) {
-        setState(() {
-          _currentUser = user;
-          _isInitialized = true;
-        });
-        // Add a welcome message
-        _addMessage(ChatMessage(
-          id: 'welcome',
-          text: '👋 Hello ${user.name}! Welcome to FlutterChat v$sdkVersion',
-          senderId: 'system',
-          senderName: 'FlutterChat',
-          timestamp: DateTime.now(),
-          isMe: false,
-        ));
-      },
-      onError: (error) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $error')),
-          );
-        }
-      },
+      ),
     );
   }
 
@@ -87,34 +58,34 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _handleSendMessage(String text) {
-    if (_currentUser == null) return;
-
     final message = ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       text: text,
-      senderId: _currentUser!.id,
-      senderName: _currentUser!.name,
+      senderId: widget.user.id,
+      senderName: widget.user.name,
       timestamp: DateTime.now(),
       isMe: true,
     );
 
     _addMessage(message);
 
-    // Send event to native side
-    PlatformChannel.sendNativeEvent('messageSent', message.toJson());
+    // Notify the caller (SDK layer handles sending to native if needed)
+    widget.onMessageSent?.call(message);
 
     // Simulate a reply after a short delay
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
-        _addMessage(ChatMessage(
-          id: '${DateTime.now().millisecondsSinceEpoch}_reply',
-          text:
-              '💬 Thanks for your message! This is an automated reply from FlutterChat v$sdkVersion.',
-          senderId: 'bot',
-          senderName: 'FlutterChat Bot',
-          timestamp: DateTime.now(),
-          isMe: false,
-        ));
+        _addMessage(
+          ChatMessage(
+            id: '${DateTime.now().millisecondsSinceEpoch}_reply',
+            text:
+                '💬 Thanks for your message! This is an automated reply from FlutterChat v$sdkVersion.',
+            senderId: 'bot',
+            senderName: 'FlutterChat Bot',
+            timestamp: DateTime.now(),
+            isMe: false,
+          ),
+        );
       }
     });
   }
@@ -122,7 +93,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
-    PlatformChannel.dispose();
     super.dispose();
   }
 
@@ -149,50 +119,49 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
-        title: _isInitialized
-            ? Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white38, width: 2),
-                    ),
-                    child: const CircleAvatar(
-                      radius: 17,
-                      backgroundColor: Colors.white24,
-                      child: Icon(Icons.person_rounded,
-                          size: 20, color: Colors.white),
-                    ),
+        title: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white38, width: 2),
+              ),
+              child: const CircleAvatar(
+                radius: 17,
+                backgroundColor: Colors.white24,
+                child: Icon(
+                  Icons.person_rounded,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.user.name,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
                   ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _currentUser?.name ?? '',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          CircleAvatar(
-                              radius: 4, backgroundColor: Color(0xFF69F0AE)),
-                          SizedBox(width: 4),
-                          Text(
-                            'Onlineee',
-                            style:
-                                TextStyle(fontSize: 11, color: Colors.white70),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            : Text('FlutterChat v$sdkVersion'),
+                ),
+                Row(
+                  children: const [
+                    CircleAvatar(radius: 4, backgroundColor: Color(0xFF69F0AE)),
+                    SizedBox(width: 4),
+                    Text(
+                      'Online',
+                      style: TextStyle(fontSize: 11, color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -209,8 +178,11 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.bolt_rounded,
-                    size: 13, color: Color(0xFFE65100)),
+                const Icon(
+                  Icons.bolt_rounded,
+                  size: 13,
+                  color: Color(0xFFE65100),
+                ),
                 const SizedBox(width: 4),
                 Text(
                   'FlutterChat SDK v$sdkVersion',
@@ -266,18 +238,17 @@ class _ChatScreenState extends State<ChatScreen> {
                   )
                 : ListView.builder(
                     controller: _scrollController,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     itemCount: _messages.length,
                     itemBuilder: (context, index) {
                       return ChatBubble(message: _messages[index]);
                     },
                   ),
           ),
-          MessageInput(
-            onSend: _handleSendMessage,
-            enabled: _isInitialized,
-          ),
+          MessageInput(onSend: _handleSendMessage, enabled: true),
         ],
       ),
     );
