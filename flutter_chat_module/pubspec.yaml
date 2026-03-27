@@ -8,7 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  package_info_plus: ^8.0.0
 
 flutter:
   module:
