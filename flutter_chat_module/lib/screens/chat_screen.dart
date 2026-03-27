@@ -182,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               radius: 4, backgroundColor: Color(0xFF69F0AE)),
                           SizedBox(width: 4),
                           Text(
-                            'Online',
+                            'Onlineee',
                             style:
                                 TextStyle(fontSize: 11, color: Colors.white70),
                           ),
